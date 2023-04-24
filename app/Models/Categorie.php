@@ -11,7 +11,7 @@ class Categorie extends Model
 {
     use HasFactory;
 
-    public function annonce() : HasMany
+    public function annonces() : HasMany
     {
         return $this->hasMany(Annonce::class) ;
     }
