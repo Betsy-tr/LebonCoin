@@ -1,8 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\admin;
 
+use App\Http\Controllers\Controller;
+use App\Models\Categorie;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Validator;
+
+
 
 class CategorieController extends Controller
 {
@@ -11,15 +17,25 @@ class CategorieController extends Controller
      */
     public function index()
     {
-        //
+        $categories = Categorie::orderBy('name','asc')->paginate(10) ;
+        return view('admin.categorie.index',compact('categories'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        //
+    public function create(Request $request)
+    { 
+        // Création d'une categorie 
+        $newsModel = new Categorie ; 
+
+        $request->validate(['nomCategorie'=>'required|min:5']); 
+
+        $newsModel->name = $request->nomCategorie ;
+        $newsModel->icone = 'icone';
+        $newsModel->save() ;
+
+        return Redirect::route('admin.categorie');
     }
 
     /**
@@ -41,9 +57,16 @@ class CategorieController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
-    {
-        //
+    public function edit(Request $request, $id)
+    { 
+        $categorie = Categorie::findOrFail($id) ;
+        $request->validate(['nomCategorie'=>'required|min:5']);
+
+        $categorie->name = $request->nomCategorie ;
+        $categorie->icone = 'icone';
+        $categorie->save() ;
+
+        return Redirect::route('admin.categorie');
     }
 
     /**
@@ -57,8 +80,12 @@ class CategorieController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function delete($id)
     {
         //
+        $categories = Categorie::findOrFail($id) ;
+        
+        $categories->delete() ;
+        return Redirect::route('admin.categorie');
     }
 }
