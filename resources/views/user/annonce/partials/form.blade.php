@@ -1,4 +1,4 @@
-<form action="{{!empty($actu)?route('admin.annonce.edit', $actu->id):route('admin.annonce.store')}}" method="post" enctype="multipart/form-data">
+<form action="{{!empty($actu)?route('user.annonce.edit', $actu->id):route('user.annonce.store')}}" method="post" enctype="multipart/form-data">
     @csrf  
   <div class="mb-5 py-3"> 
   

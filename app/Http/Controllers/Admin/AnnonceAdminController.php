@@ -28,8 +28,6 @@ class AnnonceAdminController extends Controller
     public function create()
     {
         //
-        $categories = Categorie::orderBy('name','asc')->get() ;
-        return view('admin.annonce.ajouter',compact('categories'));
         
         
     }
@@ -41,30 +39,7 @@ class AnnonceAdminController extends Controller
     {
         
         //
-        $newsModel = new Annonce ; 
-        // Controle éléments obligatoire 
-        $request->validate(['nomAnnonce'=>'required|min:5',
-                            'categorie'=>'required',
-                            'prix'=>'required']);
-                             
-        if ($request->file()) {
-
-            $fileName = $request->image->store('public/images') ;
-            $newsModel->image = $fileName ;
-            
-
-        }
-
-        $newsModel->name = $request->nomAnnonce ;
-        $newsModel->categorie_id = $request->categorie ;
-        $newsModel->user_id = Auth::user()->id ;
-        $newsModel->description = $request->description;
-        $newsModel->prix = $request->prix;
-        
-        
-        $newsModel->save() ;
-
-        return Redirect::route('admin.annonce.create');
+       
     }
 
     /**
@@ -80,12 +55,7 @@ class AnnonceAdminController extends Controller
      */
     public function edit($id)
     {
-        $actu = Annonce::findOrFail($id) ; 
-        $categories = Categorie::orderBy('name','asc')->get() ; // Retourner les catégories par ordre croissant
-
         
-
-        return view('admin.annonce.ajouter', compact('actu','categories'));
     }
 
     /**
@@ -95,31 +65,6 @@ class AnnonceAdminController extends Controller
     {
         //
         
-
-        $actu = Annonce::findOrFail($id) ; // Création d'une instance de class (model News à modifier à partir de l'id)
-        $request->validate(['nomAnnonce'=>'required|min:5',
-                            'categorie'=>'required',
-                            'prix'=>'required']);
-                             
-
-        if ($request->file()) {
-            if ($actu->image !='') {
-                Storage::delete($actu->image) ;
-            }
-            
-            $fileName = $request->image->store('public/images') ;
-            $actu->image = $fileName ;
-        }
-
-        $actu->name = $request->nomAnnonce ;
-        $actu->categorie_id = $request->categorie ;
-        $actu->user_id = Auth::user()->id ;
-        $actu->description = $request->description;
-        $actu->prix = $request->prix;
-
-        $actu->save() ;
-
-        return Redirect::route('admin.annonce.lister');
     }
 
     /**

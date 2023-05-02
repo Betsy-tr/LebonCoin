@@ -4,9 +4,11 @@ use App\Http\Controllers\admin\AnnonceAdminController;
 use App\Http\Controllers\admin\CategorieController;
 use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\user\UserController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\PublicController;
+use App\Http\Controllers\user\UserDashboardController;
+
 use App\Models\Annonce;
 use Illuminate\Support\Facades\Route;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
@@ -54,22 +56,37 @@ Route::middleware(['auth', 'can:admin'])->group(function () {
     
     //Gestion des annonces
     Route::get('admin/annonce',[AnnonceAdminController::class, 'index'])->name('admin.annonce.lister');
-    Route::get('admin/annonce/create',[AnnonceAdminController::class, 'create'])->name('admin.annonce.create');
-    Route::post('admin/annonce/store',[AnnonceAdminController::class, 'store'])->name('admin.annonce.store');
-    Route::post('admin/annonce/edit/{id}',[AnnonceAdminController::class, 'update'])->name('admin.annonce.update');
-    Route::get('/admin/annonce/edit/{id}',[AnnonceAdminController::class,'edit'])->name('admin.annonce.edit'); 
+    Route::get('admin/annonce/delete/{id}',[AnnonceAdminUserController::class, 'delete'])->name('admin.annonce.delete');
     
-    Route::get('admin/annonce/delete/{id}',[AnnonceAdminController::class, 'delete'])->name('admin.annonce.delete');
 });
+
+
+// Gestion des routes pour l'utilisateur
+Route::middleware(['auth'])->group(function () {
+    Route::get('/user/userdashboard',[UserDashboardController::class, 'index'])->name('user.userdashboard');
+
+    //Gestion des annonces 
+    Route::get('user/annonce',[UserController::class, 'index'])->name('user.annonce.lister');
+
+    Route::get('user/annonce/create',[UserController::class, 'create'])->name('user.annonce.create');
+    Route::post('user/annonce/store',[UserController::class, 'store'])->name('user.annonce.store');
+    Route::post('user/annonce/edit/{id}',[UserController::class, 'update'])->name('user.annonce.update');
+    Route::get('user/annonce/edit/{id}',[UserController::class,'edit'])->name('user.annonce.edit'); 
+    
+    Route::get('user/annonce/delete/{id}',[UserController::class, 'delete'])->name('user.annonce.delete');
+
+    Route::get('user/annonce/favorisAdd/{id}',[UserController::class, 'favorisAdd'])->name('user.annonce.favorisAdd');
+    Route::get('user/annonce/favoris',[UserController::class, 'favoris'])->name('user.annonce.favoris');
+    
+});
+
 
 Route::get('public/accueil',[PublicController::class,'index'])->name('public.accueil');
 Route::get('public/annonceDetail/{annonce}',[PublicController::class,'detail'])->name('public.annonceDetail');
 Route::get('/public/accueil/categorie/{id}',[PublicController::class,'categorie'])->name('public.accueil.categorie');
 
 
-/* Route::middleware(['auth', 'can:user'])->group(function () {
-    
-});*/
+
 
 
 

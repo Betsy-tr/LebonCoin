@@ -40,11 +40,15 @@
                 @forelse ( $annonces as $itemAnnonce)
                @include('public.partials.card')
                 @empty
-                <h1 class="text-9xl font-extrabold text-black justify-center tracking-widest">ANNONCES</h1>
+                <div class="flex items-end px-6 py-8">
+                    <h1 class="text-9xl font-extrabold text-black justify-center tracking-widest">ANNONCES</h1>
                 
-                    <div class="bg-[#FF6A3D] px-16 text-2xl font-serif rounded rotate-12 absolute">
+                    <div class="bg-[#FF6A3D] px-12 text-2xl font-serif rounded rotate-12 absolute">
                         PAS D'ANNONCES
-                       </div>
+                    </div>
+                </div>
+                
+                    
                 
                 @endforelse
               
